@@ -2,9 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'models/bowel_record.dart'; 
 import 'models/factor_record.dart'; 
+import 'models/pet_model.dart'; 
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'pages/home_page.dart';
 import 'adapter/duration_adapter.dart'; 
+import 'game/gamification.dart';
 
 void main() async{
   WidgetsFlutterBinding.ensureInitialized();
@@ -17,21 +19,24 @@ void main() async{
   Hive.registerAdapter(FoodTypeAdapter());
   Hive.registerAdapter(ExerciseLevelAdapter());
   Hive.registerAdapter(MedicationAdapter());
+  Hive.registerAdapter(PetDataAdapter());
    await Future.wait([
     Hive.openBox<BowelRecord>('bowelRecords'),
     Hive.openBox<FactorRecord>('factorRecords'),
+    Hive.openBox<PetData>('PetBox'),
   ]);
-  try {
-    print("⏳ 正在打开boxes...");
-    await Future.wait([
-      Hive.openBox<BowelRecord>('bowelRecords'),
-      Hive.openBox<FactorRecord>('factorRecords'),
-    ]);
-    print("✅ Boxes打开成功");
-  } catch (e) {
-    print("❌ Boxes打开失败: $e");
-  }
-  runApp(MyApp());
+  // try {
+  //   print("⏳ 正在打开boxes...");
+  //   await Future.wait([
+  //     Hive.openBox<BowelRecord>('bowelRecords'),
+  //     Hive.openBox<FactorRecord>('factorRecords'),
+  //   ]);
+  //   print("✅ Boxes打开成功");
+  // } catch (e) {
+  //   print("❌ Boxes打开失败: $e");
+  // }
+  runApp(GutExplorerApp());
+  //runApp(MyApp());
   // 添加全局错误捕获
   FlutterError.onError = (details) {
     print("Flutter Error: ${details.exception}");
